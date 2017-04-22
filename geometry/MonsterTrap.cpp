@@ -71,10 +71,10 @@ P reflect(P a,P b,P c){
 int ccw(P a,P b,P c){
   P ab=b-a,ac=c-a;
   P k=ac*conj(ab);
-  if(k.imag()>0)return 1;
-  if(k.imag()<0)return -1;
-  if(k.real()<0)return 2;
-  if(abs(ab)<abs(ac))return -2;
+  if(k.imag()>eps)return 1;
+  if(k.imag()<-eps)return -1;
+  if(k.real()<-eps)return 2;
+  if(abs(ab)+eps<abs(ac))return -2;
   return 0;
 }
  
