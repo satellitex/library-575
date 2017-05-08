@@ -12,13 +12,13 @@ extern inline uint xor128(void){
   return w=(w^(w>>19))^(t^(t>>8)); 
 }
 
-//ƒm[ƒh
+//ãƒãƒ¼ãƒ‰
 struct node {
   node *l,*r;
-  int val;//’l
-  int pri;//—Dæ“x
-  int cnt;//•”•ª–Ø‚ÌƒTƒCƒY
-  int sum;//•”•ª–Ø‚Ì’l‚Ì˜a
+  int val;//å€¤
+  int pri;//å„ªå…ˆåº¦
+  int cnt;//éƒ¨åˆ†æœ¨ã®ã‚µã‚¤ã‚º
+  int sum;//éƒ¨åˆ†æœ¨ã®å€¤ã®å’Œ
   node(int v) : val(v), cnt(1), sum(v) {
     l = r = NULL;
     pri = xor128();
@@ -26,7 +26,7 @@ struct node {
 };
 
 typedef pair<node*,node*> pnn;
-//•½s“ñ•ª’Tõ–Ø
+//å¹³è¡ŒäºŒåˆ†æ¢ç´¢æœ¨
 struct Treap{
   node* root;
   Treap(){ root = NULL; }
@@ -65,7 +65,7 @@ struct Treap{
     }
   }
 
-  int search(int v){//vˆÈ‰º‚ª‚¢‚­‚Â‚ ‚é‚©
+  int search(int v){//vä»¥ä¸‹ãŒã„ãã¤ã‚ã‚‹ã‹
     node* t = root;
     int sum = 0;
     int id = 0;
@@ -81,7 +81,7 @@ struct Treap{
     return sum;
   }
 
-  bool isexist(int v){//v‚ª‚ ‚é‚©”Û‚©
+  bool isexist(int v){//vãŒã‚ã‚‹ã‹å¦ã‹
     node *t = root;
     while( t ){
       if( t->val < v ){
