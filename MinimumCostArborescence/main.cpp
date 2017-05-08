@@ -133,7 +133,11 @@ int solve(Graph &G,vector<edge> &edges,int root){
         continue;
       }
       int pre=uf.find(e.from);
-      for(int i=0;i<100;i++){
+      set<int> mp;
+      while(1){
+        if(mp.count(pre))break;
+        mp.insert(pre);
+        
         if(!uf.same(pre,pos)){
           int A=uf.find(pre), B=uf.find(pos);
           uf.unite(A,B);
