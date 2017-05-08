@@ -5,6 +5,7 @@ typedef long long ll;
 ll largep   = 105757705751LL; // 12 digit
 ll prime575 =  57557557999LL; // 11 digit
 ll prime579 =   5755755799LL; // 10 digit
+ll maxprime =  1555577775559; // 13 digit
 
 
 
@@ -26,8 +27,11 @@ bool isP(ll x){
 }
 
 int main(){
-  cout<< isP(smallprime) <<endl;
-  cout<< smallprime <<endl;
-  cout<< smallprime*smallprime <<endl;
+  for( ll i=1555577775555;;i++){
+    if(isP(i)){
+      cout<<i<<endl;
+      break;
+    }
+  }
   return 0;
 }
