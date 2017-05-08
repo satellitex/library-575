@@ -1,0 +1,125 @@
+#include<bits/stdc++.h>
+using namespace std;
+ 
+double eps = 1e-8, PI = acos(-1);
+ 
+double Sqrt(double x){
+  return (x<0?0:sqrt(x));
+}
+ 
+bool eq(double a, double b){
+  return (-eps<a-b&&a-b<eps);
+}
+ 
+struct Point{
+  double x,y,z;
+  Point (double a=0,double b=0,double c=0): x(a),y(b),z(c) {}
+  Point operator + (const Point &p)const{
+    return Point(x+p.x,y+p.y,z+p.z);
+  }
+  Point operator - (const Point &p)const{
+    return Point(x-p.x,y-p.y,z-p.z);
+  }
+  Point operator * (const double &r)const{
+    return Point(x*r,y*r,z*r);
+  }
+  Point operator / (const double &r)const{
+    return Point(x/r,y/r,z/r);
+  }
+};
+ 
+typedef Point Vector;
+ 
+double dot(Point a,Point b){
+  return a.x*b.x+a.y*b.y+a.z*b.z;
+}
+ 
+Point cross(Point a,Point b){
+  double nx=a.y*b.z-b.y*a.z;
+  double ny=a.z*b.x-b.z*a.x;
+  double nz=a.x*b.y-b.x*a.y;
+  return Point(nx,ny,nz);
+}
+ 
+double norm(Point a){
+  return dot(a,a);
+}
+ 
+double abs(Point a){
+  return sqrt( norm(a) );
+}
+ 
+ 
+struct Line{
+  Point p,q;
+  Line(Point a=Point(),Point b=Point()):p(a),q(b){}
+  Point v(){    return q-p;  }
+};
+ 
+ 
+struct Plane{
+  Point p;
+  Vector v0,v1;
+  Plane(Point a=Point(),Vector b=Vector(),Vector c=Vector())
+    :p(a),v0(b),v1(c){}
+};
+ 
+Point cross(Plane s){
+  return cross(s.v0,s.v1);
+}
+ 
+bool isParallel(Vector s,Vector t){
+  return eq( 0.0 , abs(cross(s,t)) );
+}
+ 
+bool isParallel(Plane s,Vector t){
+  return eq(0,dot(cross(s.v0,s.v1),t));
+}
+ 
+bool isParallel(Plane s,Plane t){
+  return isParallel( cross(s.v0,s.v1) , cross(t.v0,t.v1) );
+}
+ 
+ 
+double getDistance(Plane s,Point t){
+  Vector A=cross(s.v0,s.v1);
+  return dot(A,t-s.p)/abs(A);
+}
+ 
+Point getCrossPoint(Plane s,Line t){
+  double A=getDistance(s,t.p);
+  double B=getDistance(s,t.p+t.v());
+  return t.p+t.v()*A/(A-B);
+}
+ 
+Line getCrossLine(Plane s,Plane t){
+  Point A;
+  if(isParallel(s,t.v0))A=getCrossPoint(s,Line(t.p,t.p+t.v1));
+  else A=getCrossPoint(s,Line(t.p,t.p+t.v0));
+  return Line(A,A+cross(cross(s),cross(t)));
+}
+ 
+struct Sphere{
+  Point p;
+  double r;
+  Sphere(Point a,double b):p(a),r(b){}
+};
+ 
+vector<Point> getCrossPoint(Sphere s,Line t){
+  vector<Point> res;
+  Vector a=s.p-t.p;
+  Vector b=t.v();
+  double base=dot(a,b)/abs(b);
+  double hh=norm(cross(a,b))/norm(b);
+  if(s.r*s.r+eps < hh )return res;
+  double w=Sqrt( s.r*s.r - hh );
+  res.push_back(t.p+t.v()/abs(t.v())*(base-w));
+  res.push_back(t.p+t.v()/abs(t.v())*(base+w));
+  return res;
+}
+ 
+double getTime(Line s,Point t){
+  double res= abs(t-s.p)/abs(s.v());
+  return (dot(t-s.p,s.v())>0.0?res:-res);
+}
+ 
