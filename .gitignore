@@ -31,5 +31,9 @@
 # ~ file
 *~
 
+# result
+result
+print_result.txt
+
 # CMakeList.txt
 CMakeLists.txt

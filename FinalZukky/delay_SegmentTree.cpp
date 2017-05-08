@@ -2,25 +2,25 @@
 using namespace std;
 #define INF (1<<30)
 
-//’x‰„•]‰¿ƒZƒOƒƒ“ƒgƒcƒŠ[i‚ ‚é‹æŠÔ‚Éˆê—l‚É‘«‚·Aˆê—l‚É0‚Å‰Šú‰»@{@‹æŠÔ‚ÌÅ‘å’l or Å¬’l or ‘˜a ‚ğ‹‚ß‚é@“®ì‚ª‰Â”\)
-//ˆê—l‚É0‚É‰Šú‰»‚ÉŠÖ‚µ‚Ä‚ÍáŠ±O‚ªd‚­‚È‚é‹C‚ª‚·‚é‚Ì‚Åg‚í‚È‚¢‚ÍÁ‚µ‚Ä‚­‚¾‚³‚¢B
-//w’è‚·‚é‹æŠÔ‚Íí‚É [a,b) ‚Ì”¼ŠJ‹æŠÔ‚Å‚ ‚é‚±‚Æ‚É’ˆÓ‚µ‚Ä‰º‚³‚¢B
+//é…å»¶è©•ä¾¡ã‚»ã‚°ãƒ¡ãƒ³ãƒˆãƒ„ãƒªãƒ¼ï¼ˆã‚ã‚‹åŒºé–“ã«ä¸€æ§˜ã«è¶³ã™ã€ä¸€æ§˜ã«0ã§åˆæœŸåŒ–ã€€ï¼‹ã€€åŒºé–“ã®æœ€å¤§å€¤ or æœ€å°å€¤ or ç·å’Œ ã‚’æ±‚ã‚ã‚‹ã€€å‹•ä½œãŒå¯èƒ½)
+//ä¸€æ§˜ã«0ã«åˆæœŸåŒ–ã«é–¢ã—ã¦ã¯è‹¥å¹²OãŒé‡ããªã‚‹æ°—ãŒã™ã‚‹ã®ã§ä½¿ã‚ãªã„æ™‚ã¯æ¶ˆã—ã¦ãã ã•ã„ã€‚
+//æŒ‡å®šã™ã‚‹åŒºé–“ã¯å¸¸ã« [a,b) ã®åŠé–‹åŒºé–“ã§ã‚ã‚‹ã“ã¨ã«æ³¨æ„ã—ã¦ä¸‹ã•ã„ã€‚
 struct segtree{
-  //Å‘å’l‚ğ‹‚ß‚é—p
+  //æœ€å¤§å€¤ã‚’æ±‚ã‚ã‚‹ç”¨
   vector<int> datamax;
 
-  //Å¬’l‚ğ‹‚ß‚é—p
+  //æœ€å°å€¤ã‚’æ±‚ã‚ã‚‹ç”¨
   vector<int> datamin;
 
-  //‘˜a‚ğ‹‚ß‚é—p
+  //ç·å’Œã‚’æ±‚ã‚ã‚‹ç”¨
   vector<int> datasum;
 
-  //’x‰„—p
+  //é…å»¶ç”¨
   vector<int> delay;
 
   int n;
 
-  //‰Šú‰»
+  //åˆæœŸåŒ–
   void init(int _n){
     n = 1;
     while( n < _n ) n*=2;
@@ -30,7 +30,7 @@ struct segtree{
     delay.resize( 2 * n );
   }
 
-  //ƒNƒŠƒA(‰½“x‚àg‚¤ê‡j
+  //ã‚¯ãƒªã‚¢(ä½•åº¦ã‚‚ä½¿ã†å ´åˆï¼‰
   void clear(){
     datamax.clear();
     datamin.clear();
@@ -38,10 +38,10 @@ struct segtree{
     delay.clear();
   }
  
-  //	 ’x‰„•]‰¿–{‘Ì
-  /*	l,r ‚ÉŠÖ‚µ‚Ä‚Í‘˜a‚ğ‹‚ß‚é‚É‚Ì‚İg‚Á‚Ä‚¢‚éB */
-  /*	0‚Å‰Šú‰»‚·‚é“®ì‚ª‚¢‚ç‚È‚¢ê‡‚ÍO€‰‰Zq‚Ì•”•ª‚Æ
-  //    if( delay[2*k+i]<0 && delay[k] > 0 ) delaycalc(2*k+i, i==0?l:(l+r)/2, i==0?(l+r)/2:r) ‚Ì•”•ª‚ª‚¢‚ç‚È‚¢
+  //	 é…å»¶è©•ä¾¡æœ¬ä½“
+  /*	l,r ã«é–¢ã—ã¦ã¯ç·å’Œã‚’æ±‚ã‚ã‚‹æ™‚ã«ã®ã¿ä½¿ã£ã¦ã„ã‚‹ã€‚ */
+  /*	0ã§åˆæœŸåŒ–ã™ã‚‹å‹•ä½œãŒã„ã‚‰ãªã„å ´åˆã¯ä¸‰é …æ¼”ç®—å­ã®éƒ¨åˆ†ã¨
+  //    if( delay[2*k+i]<0 && delay[k] > 0 ) delaycalc(2*k+i, i==0?l:(l+r)/2, i==0?(l+r)/2:r) ã®éƒ¨åˆ†ãŒã„ã‚‰ãªã„
   //                                                  */
   void delaycalc(int k,int l,int r){
     datamax[k] = delay[k]<0?0:datamax[k]+delay[k];
@@ -56,7 +56,7 @@ struct segtree{
     delay[k] = 0;
   }
 
-  //ŠÈˆÕ”Åi‘˜a‚É‘Î‚·‚éˆ—–³‚µand0‰Šú‰»–³‚µver)
+  //ç°¡æ˜“ç‰ˆï¼ˆç·å’Œã«å¯¾ã™ã‚‹å‡¦ç†ç„¡ã—and0åˆæœŸåŒ–ç„¡ã—ver)
   void delaycalc(int k){
     datamax[k] = datamax[k]+delay[k];
     datamin[k] = datamin[k]+delay[k];
@@ -67,7 +67,7 @@ struct segtree{
   }
   
 
-  //‹æŠÔ@[a,b)@‚Éˆê—l‚É@x@‚ğ‘«‚· 
+  //åŒºé–“ã€€[a,b)ã€€ã«ä¸€æ§˜ã«ã€€xã€€ã‚’è¶³ã™ 
   void add(int a,int b,int x,int k,int l,int r){
     delaycalc(k,l,r);
     if( r<=a || b<=l ) return;
@@ -83,7 +83,7 @@ struct segtree{
     }
   }
 
-  //‚ ‚é‹æŠÔ‚ÌÅ‘å’l‚ğ‹‚ß‚é
+  //ã‚ã‚‹åŒºé–“ã®æœ€å¤§å€¤ã‚’æ±‚ã‚ã‚‹
   int querymax(int a,int b,int k,int l,int r){
     delaycalc(k,l,r);
     if( r<=a || b<=l ) return 0;
@@ -96,7 +96,7 @@ struct segtree{
     }
   }
 
-  //‚ ‚é‹æŠÔ‚ÌÅ¬’l‚ğ‹‚ß‚é
+  //ã‚ã‚‹åŒºé–“ã®æœ€å°å€¤ã‚’æ±‚ã‚ã‚‹
   int querymin(int a,int b,int k,int l,int r){
     delaycalc(k,l,r);
     if( r<=a || b<=l ) return INF;
@@ -109,7 +109,7 @@ struct segtree{
     }
   }
 
-  //‚ ‚é‹æŠÔ‚Ì‘˜a‚ğ‹‚ß‚é
+  //ã‚ã‚‹åŒºé–“ã®ç·å’Œã‚’æ±‚ã‚ã‚‹
   int querysum(int a,int b,int k,int l,int r){
     delaycalc(k,l,r);
     if( r<=a || b<=l ) return 0;
@@ -122,10 +122,10 @@ struct segtree{
     }
   }
 
-@//ŠeŠÈˆÕƒNƒGƒŠŒÄ‚Ño‚µ
-  void reset(int a,int b){ add( a, b, -1,  0, 0, n ); }//0‚Å‰Šú‰»
-  void add( int a,int b,int x){ add( a, b, x, 0,0,n); }//‰Á‚¦‚é
-  int querymax(int a,int b){ return querymax(a,b,0,0,n); }//Å‘å’læ“¾
-  int querymin(int a,int b){ return querymin(a,b,0,0,n); }//Å¬’læ“¾
-  int querysum(int a,int b){ return querysum(a,b,0,0,n); }//‘˜aæ“¾
+ã€€//å„ç°¡æ˜“ã‚¯ã‚¨ãƒªå‘¼ã³å‡ºã—
+  void reset(int a,int b){ add( a, b, -1,  0, 0, n ); }//0ã§åˆæœŸåŒ–
+  void add( int a,int b,int x){ add( a, b, x, 0,0,n); }//åŠ ãˆã‚‹
+  int querymax(int a,int b){ return querymax(a,b,0,0,n); }//æœ€å¤§å€¤å–å¾—
+  int querymin(int a,int b){ return querymin(a,b,0,0,n); }//æœ€å°å€¤å–å¾—
+  int querysum(int a,int b){ return querysum(a,b,0,0,n); }//ç·å’Œå–å¾—
 };
